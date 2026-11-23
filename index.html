@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="or">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Odia GK Master</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;font-family:Arial,sans-serif;
+ background:#f2f5ff;color:#202b45;
+}
+header{
+ background:linear-gradient(135deg,#5638d5,#8b55ed);
+ color:white;text-align:center;padding:28px 15px;
+ border-radius:0 0 25px 25px;
+}
+header h1{margin:0;font-size:27px}
+header p{margin:9px 0 0}
+.container{max-width:600px;margin:20px auto;padding:15px}
+.card{
+ background:white;padding:22px;border-radius:18px;
+ box-shadow:0 5px 20px #00000012;
+}
+.stats{display:flex;justify-content:space-between;margin-bottom:20px}
+.stat{background:#f0edff;padding:12px;border-radius:12px;text-align:center;flex:1;margin:4px}
+.stat b{display:block;color:#623bd5;font-size:20px}
+#question{font-size:21px;line-height:1.6;margin:20px 0}
+.option{
+ display:block;width:100%;text-align:left;
+ padding:15px;margin:10px 0;border:2px solid #e5e7f0;
+ background:white;border-radius:12px;font-size:17px;
+ color:#26334d;cursor:pointer;
+}
+.option:disabled{cursor:default}
+.option.correct{background:#e2f8e9;border-color:#20a45a}
+.option.wrong{background:#ffe8e8;border-color:#e34c4c}
+button.main{
+ width:100%;padding:15px;border:0;border-radius:12px;
+ background:#633bd8;color:white;font-size:18px;
+ font-weight:bold;margin-top:15px;cursor:pointer;
+}
+#feedback{font-weight:bold;min-height:25px;margin-top:15px}
+#result{text-align:center;display:none}
+#result h2{color:#623bd5}
+footer{text-align:center;color:#777;padding:20px;font-size:13px}
+</style>
+</head>
+<body>
+
+<header>
+<h1>📚 Odia GK Master</h1>
+<p>ଜ୍ଞାନ ବଢ଼ାନ୍ତୁ, ସଫଳତା ପାଆନ୍ତୁ</p>
+</header>
+
+<div class="container">
+<div class="card" id="quiz">
+
+<div class="stats">
+<div class="stat">Question<b id="number">1/10</b></div>
+<div class="stat">Score<b id="score">0</b></div>
+</div>
+
+<div id="question"></div>
+<div id="options"></div>
+<div id="feedback"></div>
+<button class="main" id="next" onclick="nextQuestion()" style="display:none">Next Question ➜</button>
+
+</div>
+
+<div class="card" id="result">
+<h2>🎉 Quiz Completed!</h2>
+<h1 id="finalScore"></h1>
+<p id="message"></p>
+<button class="main" onclick="restartQuiz()">Play Again</button>
+</div>
+</div>
+
+<footer>Odia GK Master © 2026</footer>
+
+<script>
+const questions = [
+{
+q:"ଓଡ଼ିଶାର ରାଜଧାନୀ କେଉଁଟି?",
+o:["କଟକ","ଭୁବନେଶ୍ୱର","ପୁରୀ","ସମ୍ବଲପୁର"],a:1
+},
+{
+q:"ହୀରାକୁଦ ଡ୍ୟାମ୍ କେଉଁ ନଦୀ ଉପରେ ଅବସ୍ଥିତ?",
+o:["ଗଙ୍ଗା","ଯମୁନା","ମହାନଦୀ","ବ୍ରାହ୍ମଣୀ"],a:2
+},
+{
+q:"କୋଣାର୍କ ସୂର୍ଯ୍ୟ ମନ୍ଦିର କେଉଁ ରାଜ୍ୟରେ ଅଛି?",
+o:["ବିହାର","ଓଡ଼ିଶା","ଆସାମ","ଗୁଜରାଟ"],a:1
+},
+{
+q:"ଚିଲିକା ହ୍ରଦ କେଉଁ ରାଜ୍ୟରେ ଅଛି?",
+o:["ଓଡ଼ିଶା","କେରଳ","ପଞ୍ଜାବ","ରାଜସ୍ଥାନ"],a:0
+},
+{
+q:"ଓଡ଼ିଶା କେବେ ସ୍ୱତନ୍ତ୍ର ପ୍ରଦେଶ ହୋଇଥିଲା?",
+o:["୧୯୪୭","୧୯୩୬","୧୯୫୦","୧୯୫୬"],a:1
+},
+{
+q:"ଭାରତର ଜାତୀୟ ପଶୁ କିଏ?",
+o:["ସିଂହ","ହାତୀ","ବାଘ","ହରିଣ"],a:2
+},
+{
+q:"ଭାରତର ସମ୍ବିଧାନ କେବେ ଲାଗୁ ହୋଇଥିଲା?",
+o:["୧୫ ଅଗଷ୍ଟ ୧୯୪୭","୨୬ ଜାନୁଆରୀ ୧୯୫୦","୨ ଅକ୍ଟୋବର ୧୯୪୯","୧ ଜାନୁଆରୀ ୧୯୫୦"],a:1
+},
+{
+q:"ଭାରତର ପ୍ରଥମ ରାଷ୍ଟ୍ରପତି କିଏ ଥିଲେ?",
+o:["ଜବାହରଲାଲ ନେହେରୁ","ଡ଼ଃ ରାଜେନ୍ଦ୍ର ପ୍ରସାଦ","ସର୍ଦ୍ଦାର ପଟେଲ","ଡ଼ଃ ରାଧାକୃଷ୍ଣନ"],a:1
+},
+{
+q:"ସୌରମଣ୍ଡଳର ସବୁଠାରୁ ବଡ଼ ଗ୍ରହ କେଉଁଟି?",
+o:["ପୃଥିବୀ","ମଙ୍ଗଳ","ଶନି","ବୃହସ୍ପତି"],a:3
+},
+{
+q:"ଗଙ୍ଗା ନଦୀର ମୁଖ୍ୟ ଉତ୍ସ କେଉଁଠାରେ?",
+o:["ଗଙ୍ଗୋତ୍ରୀ ହିମବାହ","ଚିଲିକା","ଅମରକଣ୍ଟକ","ମାନସରୋବର"],a:0
+}
+];
+
+let current=0,score=0,answered=false;
+
+function showQuestion(){
+ answered=false;
+ let q=questions[current];
+ document.getElementById("number").innerText=(current+1)+"/"+questions.length;
+ document.getElementById("score").innerText=score;
+ document.getElementById("question").innerText=(current+1)+". "+q.q;
+ document.getElementById("feedback").innerText="";
+ document.getElementById("next").style.display="none";
+ let box=document.getElementById("options");
+ box.innerHTML="";
+ q.o.forEach((option,i)=>{
+  let btn=document.createElement("button");
+  btn.className="option";
+  btn.innerText=String.fromCharCode(65+i)+". "+option;
+  btn.onclick=()=>checkAnswer(i,btn);
+  box.appendChild(btn);
+ });
+}
+
+function checkAnswer(i,btn){
+ if(answered)return;
+ answered=true;
+ let q=questions[current];
+ let buttons=document.querySelectorAll(".option");
+ buttons.forEach((b,index)=>{
+  b.disabled=true;
+  if(index===q.a)b.classList.add("correct");
+ });
+ if(i===q.a){
+  score++;
+  document.getElementById("feedback").innerText="✅ ସଠିକ୍ ଉତ୍ତର!";
+  document.getElementById("feedback").style.color="green";
+ }else{
+  btn.classList.add("wrong");
+  document.getElementById("feedback").innerText="❌ ଭୁଲ ଉତ୍ତର! ସଠିକ୍ ଉତ୍ତର: "+q.o[q.a];
+  document.getElementById("feedback").style.color="red";
+ }
+ document.getElementById("score").innerText=score;
+ document.getElementById("next").style.display="block";
+ document.getElementById("next").innerText=
+ current===questions.length-1?"See Result":"Next Question ➜";
+}
+
+function nextQuestion(){
+ if(!answered)return;
+ current++;
+ if(current<questions.length){
+  showQuestion();
+ }else{
+  document.getElementById("quiz").style.display="none";
+  document.getElementById("result").style.display="block";
+  document.getElementById("finalScore").innerText=score+" / "+questions.length;
+  document.getElementById("message").innerText=
+   score>=8?"ବହୁତ ଭଲ! ଆପଣଙ୍କ ଜ୍ଞାନ ଉତ୍କୃଷ୍ଟ।":
+   "ଭଲ ଚେଷ୍ଟା! ପୁଣି ଅଭ୍ୟାସ କରନ୍ତୁ।";
+ }
+}
+
+function restartQuiz(){
+ current=0;score=0;
+ document.getElementById("quiz").style.display="block";
+ document.getElementById("result").style.display="none";
+ showQuestion();
+}
+
+showQuestion();
+</script>
+</body>
+</html>
